@@ -35,21 +35,13 @@ router.use((req, res, next) => {
 /************************************************
 / Routing Rules
 /***********************************************/
-router.get("/userinfo",
-user.checkLogin,
-(req, res) => {
-  res.json({
-    "result": "true",
-    "code": "200",
-    "data": {
-      "name": "psychblue"
-    }
-  });
-});
-
 router.get("/*", (req, res) => {
   res.render("index");
 });
+
+router.post("/login",
+  user.doLocalLogin
+);
 
 // 404 Not Found
 router.all("/*", (req, res) => {

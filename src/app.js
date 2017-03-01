@@ -12,6 +12,7 @@ import fs from "fs";
 /***********************************************/
 import loggerFactory from "./lib/logger/logger";
 import routes from "./index";
+import loginManager from "./lib/user/loginManager";
 
 const confParams = JSON.parse(fs.readFileSync("./configure.json"));
 let logger = loggerFactory("Main");
@@ -48,8 +49,8 @@ else{
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({extended: "true"}));
   app.use(session(confParams.express_session));
-  //app.use(passport.initialize());
-  //app.use(passport.session());
+  app.use(loginManager.passport.initialize());
+  app.use(loginManager.passport.session());
   app.use("/", routes);
 
   /************************************************
