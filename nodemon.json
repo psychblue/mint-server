@@ -1,0 +1,3 @@
+{
+  "ignore": ["statics/*", "src/*", ".DS_Store"]
+}

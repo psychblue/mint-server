@@ -1,0 +1,26 @@
+{
+  "express": {
+    "viewPath": "./views",
+    "staticPath": "./statics"
+  },
+  "http_server": {
+    "port": "8080"
+  },
+  "express_session": {
+    "name": "sid",
+    "secret": "IALWAYSCU8219!",
+    "resave": "false",
+    "saveUninitialized": "true",
+    "cookie": {
+      "maxAge": 86400000
+    }
+  },
+  "mysql": {
+    "host": "localhost",
+    "port": "3306",
+    "user": "psychblue",
+    "password": "8219kjs",
+    "database": "mint",
+    "dateStrings": "true"
+  }
+}
