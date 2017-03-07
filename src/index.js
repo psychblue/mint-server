@@ -6,48 +6,41 @@ import express from "express";
 /************************************************
 / Custom Modules
 /***********************************************/
-import loggerFactory from "./lib/logger/logger";
-import * as user from "./route/user";
+import logger from "./lib/logger/logger";
+import routingFuncFactory from "./route/RoutingFuncFactory";
 
 /************************************************
 / Variables
 /***********************************************/
 const router = express.Router();
-const logger = loggerFactory("Router");
+const log = logger("Router");
 
 /************************************************
 / Router Middlewares
 /***********************************************/
-router.use((req, res, next) => {
-
-  if(req.user !== undefined){
-    logger.debug("User request is on [ " + req.path + " ] by [ " + req.user.username + " ]");
-  }
-  else{
-    logger.debug("User request is on [ " + req.path + " ] by [ Anonymous ]");
-  }
-
-  req.container = {};
-
-  next();
-});
+router.use(routingFuncFactory.user.checkLogin());
+router.use(routingFuncFactory.user.addUserDataContainer());
 
 /************************************************
 / Routing Rules
 /***********************************************/
+router.get("/test", (req, res) => {
+  res.render("index");
+});
+
 router.get("/*", (req, res) => {
   res.render("index");
 });
 
 router.post("/login",
-  user.doLocalLogin
+  routingFuncFactory.user.doLocalLogin()
 );
 
 // 404 Not Found
 router.all("/*", (req, res) => {
   res.json({
-    "result": "false",
-    "code": "404",
+    "result": false,
+    "code": 404,
     "text": "Not Found"
   });
 });

@@ -16,7 +16,7 @@ const padStr = (i) => (i < 10) ? "0" + i : "" + i;
 
 const getFormattedDate = () => {
 	let temp = new Date();
-	return dateStr = "_"
+	const dateStr = "_"
 									+ padStr(temp.getFullYear())
 									+ padStr(1 + temp.getMonth())
 									+ padStr(temp.getDate())
@@ -24,14 +24,15 @@ const getFormattedDate = () => {
 									+ padStr(temp.getHours())
 									+ padStr(temp.getMinutes())
 									+ padStr(temp.getSeconds());
+	return dateStr;
 }
 
 /************************************************
 / Module APIs
 /***********************************************/
-const logger = (jsname) => {
+const logger = (name) => {
 
-	const label = jsname;
+	const label = name;
 
 	container.add(label, {
 		transports: [
@@ -40,10 +41,11 @@ const logger = (jsname) => {
 				filename: "main.log",
 				maxsize: 1000000,
 				maxFiles: 10,
+				colorize: true,
 				rotationFormat: () => getFormattedDate(),
 				json: false,
 				timestamp: () => moment().format("YYYY-MM-DD HH:mm:ss.SSS"),
-				formatter: (options) => options.timestamp()	+ " ["
+				formatter: (options) => "(" + process.pid + ")\t" + options.timestamp()	+ " ["
 																+ options.level.toUpperCase()
 																+ "]\t["
 																+ label
@@ -54,6 +56,11 @@ const logger = (jsname) => {
 		]
 	});
 	const logger = container.get(label);
+
+	logger.func = (funcName) => {
+		logger.info(">> ENTER: " + funcName);
+	};
+
 	logger.info("Logger for %s is set... ", label);
 
 	return logger;

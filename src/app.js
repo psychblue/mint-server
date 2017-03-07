@@ -10,33 +10,37 @@ import fs from "fs";
 /************************************************
 / Custom Modules
 /***********************************************/
-import loggerFactory from "./lib/logger/logger";
+import logger from "./lib/logger/logger";
 import routes from "./index";
 import loginManager from "./lib/user/loginManager";
 
-const confParams = JSON.parse(fs.readFileSync("./configure.json"));
-let logger = loggerFactory("Main");
-
 /************************************************
-/ Cluster Setting
+/ Cluster Master Setting
 /***********************************************/
-cluster.schedulingPolicy = cluster.SCHED_RR;
-
 if(cluster.isMaster){
 
+  let log = logger("Master");
+
+  log.info("=============== MINT ==============");
+
+  cluster.schedulingPolicy = cluster.SCHED_RR;
   cluster.fork();
 
   cluster.on("online", (worker) => {
-    logger.info("Worker is online: pid: " + worker.process.pid);
+    log.info("Worker is online: pid: " + worker.process.pid);
   });
 
   cluster.on("exit", (worker, code, signal) => {
-    logger.info("Worker is dead: pid: " + worker.process.pid + ", code: " + code + ", signal: " + signal);
+    log.info("Worker is dead: pid: " + worker.process.pid + ", code: " + code + ", signal: " + signal);
     cluster.fork();
   });
 
 }
 else{
+
+  let log = logger("Worker");
+
+  const confParams = JSON.parse(fs.readFileSync("./configure.json"));
 
   /************************************************
   / Express Settings
@@ -57,8 +61,7 @@ else{
   / HTTP Server
   /***********************************************/
   const httpServer = app.listen(confParams.http_server.port, () => {
-    logger.info("=============== MINT ==============");
-    logger.info("Listening on port %d", httpServer.address().port);
+    log.info("Listening on port %d", httpServer.address().port);
   });
 
 }

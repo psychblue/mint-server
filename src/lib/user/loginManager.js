@@ -7,21 +7,29 @@ import { Strategy } from "passport-local";
 /************************************************
 / Custom Modules
 /***********************************************/
-import loggerFactory from "../logger/logger";
-
-const logger = loggerFactory("loginManager");
+import logger from "../logger/logger";
 
 //Passport Setting
 class LoginManager {
 
   constructor(){
 
+    this.log = logger("LoginManager");
+    this.whitePath = [
+      "/",
+      "/login"
+    ];
     this.passport = passport;
 
+    this.initPassport(this.passport);
+  }
+
+  initPassport(passport){
     //Passport Setting
     let localStrategy = new Strategy((username, password, done) => {
 
       if(true){
+        var user = {"username": username};
         return done(null, user);
       }
       else{
@@ -29,17 +37,26 @@ class LoginManager {
       }
     });
 
-    this.passport.use(localStrategy);
+    passport.use(localStrategy);
 
-    this.passport.serializeUser((user, done) => {
+    passport.serializeUser((user, done) => {
       done(null, user);
     });
 
-    this.passport.deserializeUser((user, done) => {
+    passport.deserializeUser((user, done) => {
       done(null, user);
     });
 
-    logger.info("Passport is set...");
+    this.log.info("Passport is set...");
+  }
+
+  checkWhitePath(path){
+    if(this.whitePath.find((element) => element === path) !== undefined){
+      return true;
+    }
+    else{
+      return false;
+    }
   }
 
 }
