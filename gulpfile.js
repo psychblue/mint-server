@@ -44,7 +44,7 @@ var webpackOptions = {
       }
     ]
   },
-
+  
   plugins: [
     new webpack.DefinePlugin({
       'process.env': {

@@ -57,6 +57,23 @@ else{
   app.use(loginManager.passport.session());
   app.use("/", routes);
 
+  app.use((req, res) => {
+    res.json({
+      "result": false,
+      "code": 404,
+      "text": "Not Found"
+    });
+  });
+
+  app.use((err, req, res, next) => {
+    log.error("Error: " + err.stack);
+    res.json({
+      "result": false,
+      "code": 500,
+      "text": "Server Error"
+    });
+  });
+
   /************************************************
   / HTTP Server
   /***********************************************/

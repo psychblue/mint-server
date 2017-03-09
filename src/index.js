@@ -24,10 +24,6 @@ router.use(routingFuncFactory.user.addUserDataContainer());
 /************************************************
 / Routing Rules
 /***********************************************/
-router.get("/test", (req, res) => {
-  res.render("index");
-});
-
 router.get("/*", (req, res) => {
   res.render("index");
 });
@@ -35,14 +31,5 @@ router.get("/*", (req, res) => {
 router.post("/login",
   routingFuncFactory.user.doLocalLogin()
 );
-
-// 404 Not Found
-router.all("/*", (req, res) => {
-  res.json({
-    "result": false,
-    "code": 404,
-    "text": "Not Found"
-  });
-});
 
 export default router;
