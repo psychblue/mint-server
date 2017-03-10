@@ -1,13 +1,13 @@
 /************************************************
 / Custom Modules
 /***********************************************/
-import logger from "../lib/logger/logger";
-import userFunction from "./UserFunction";
+import LogManager from "../lib/logger/LogManager";
+import userFunction from "./userFunction";
 
 class RoutingFuncFactory {
 
   constructor(){
-    this.log = logger("RoutingFuncFactory");
+    this.log = new LogManager("RoutingFuncFactory");
     this.user = userFunction;
   }
 

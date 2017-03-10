@@ -7,14 +7,14 @@ import { Strategy } from "passport-local";
 /************************************************
 / Custom Modules
 /***********************************************/
-import logger from "../logger/logger";
+import LogManager from "../logger/LogManager";
 
 //Passport Setting
 class LoginManager {
 
   constructor(){
 
-    this.log = logger("LoginManager");
+    this.log = new LogManager("LoginManager");
     this.whitePath = [
       "/",
       "/login"

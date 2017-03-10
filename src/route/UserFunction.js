@@ -1,13 +1,13 @@
 /************************************************
 / Custom Modules
 /***********************************************/
-import logger from "../lib/logger/logger";
+import LogManager from "../lib/logger/LogManager";
 import loginManager from "../lib/user/loginManager";
 
 class UserFunction {
 
   constructor(){
-    this.log = logger("Router/User");
+    this.log = new LogManager("UserFunction");
   }
 
   checkLogin() {

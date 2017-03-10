@@ -10,16 +10,16 @@ import fs from "fs";
 /************************************************
 / Custom Modules
 /***********************************************/
-import logger from "./lib/logger/logger";
+import LogManager from "./lib/logger/LogManager";
 import routes from "./index";
 import loginManager from "./lib/user/loginManager";
 
+
+const log = new LogManager("Main");
 /************************************************
 / Cluster Master Setting
 /***********************************************/
 if(cluster.isMaster){
-
-  let log = logger("Master");
 
   log.info("=============== MINT ==============");
 
@@ -37,8 +37,6 @@ if(cluster.isMaster){
 
 }
 else{
-
-  let log = logger("Worker");
 
   const confParams = JSON.parse(fs.readFileSync("./configure.json"));
 

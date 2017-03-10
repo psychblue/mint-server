@@ -6,14 +6,14 @@ import express from "express";
 /************************************************
 / Custom Modules
 /***********************************************/
-import logger from "./lib/logger/logger";
-import routingFuncFactory from "./route/RoutingFuncFactory";
+import LogManager from "./lib/logger/LogManager";
+import routingFuncFactory from "./route/routingFuncFactory";
 
 /************************************************
 / Variables
 /***********************************************/
 const router = express.Router();
-const log = logger("Router");
+const log = new LogManager("Router");
 
 /************************************************
 / Router Middlewares
