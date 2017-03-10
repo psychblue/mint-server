@@ -10,7 +10,13 @@ class Logger {
 	constructor(label, options){
 		const container = new winston.Container();
 		container.add(label, options);
+
 		this.logger = container.get(label);
+
+		this.logger.on("error", (err) => {
+			this.logger.error(err.stack);
+		})
+
 		this.logger.info("Logger is set...");
 	}
 

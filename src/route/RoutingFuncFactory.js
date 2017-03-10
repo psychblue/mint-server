@@ -9,6 +9,7 @@ class RoutingFuncFactory {
   constructor(){
     this.log = new LogManager("RoutingFuncFactory");
     this.user = userFunction;
+    this.log.info("RoutingFuncFactory is set...");
   }
 
 }

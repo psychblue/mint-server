@@ -53,9 +53,19 @@ else{
   app.use(session(confParams.express_session));
   app.use(loginManager.passport.initialize());
   app.use(loginManager.passport.session());
+  app.use((req, res, next) => {
+    if(req.user !== undefined){
+      log.info("User request is on [ " + req.path + " ] by [ " + req.user.username + " ]");
+    }
+    else{
+      log.info("User request is on [ " + req.path + " ] by [ Anonymous ]");
+    }
+    next();
+  });
   app.use("/", routes);
 
   app.use((req, res) => {
+    log.error("Route " + req.path + " is not found.");
     res.json({
       "result": false,
       "code": 404,
@@ -64,7 +74,7 @@ else{
   });
 
   app.use((err, req, res, next) => {
-    log.error("Error: " + err.stack);
+    log.error(err.stack);
     res.json({
       "result": false,
       "code": 500,

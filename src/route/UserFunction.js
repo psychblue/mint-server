@@ -8,6 +8,7 @@ class UserFunction {
 
   constructor(){
     this.log = new LogManager("UserFunction");
+    this.log.info("UserFunction is set...");
   }
 
   checkLogin() {
@@ -21,6 +22,7 @@ class UserFunction {
       }
       else{
         if(req.xhr){
+          this.log.debug("Unauthorized AJAX request");
           res.json({
             "result": false,
             "code": 401,
@@ -28,11 +30,8 @@ class UserFunction {
           });
         }
         else{
-          res.json({
-            "result": false,
-            "code": 401,
-            "text": "Unauthorized Page"
-          });
+          this.log.debug("Unauthorized Normal HTTP request");
+          res.redirect("/login");
         }
       }
     }
@@ -44,13 +43,6 @@ class UserFunction {
     return (req, res, next) => {
 
       this.log.func("addUserDataContainer()");
-
-      if(req.user !== undefined){
-        this.log.debug("User request is on [ " + req.path + " ] by [ " + req.user.username + " ]");
-      }
-      else{
-        this.log.debug("User request is on [ " + req.path + " ] by [ Anonymous ]");
-      }
 
       req.container = {};
 
