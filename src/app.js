@@ -15,7 +15,7 @@ import routes from "./index";
 import loginManager from "./lib/user/loginManager";
 
 
-const log = new LogManager("Main");
+const log = new LogManager("App");
 /************************************************
 / Cluster Master Setting
 /***********************************************/

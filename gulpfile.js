@@ -27,7 +27,14 @@ var webpackOptions = {
     filename: "mint.server.min.js"
   },
 
+  plugins: [
+    new webpack.DefinePlugin({
+        "process.env.NODE_ENV": JSON.stringify("development")
+    })
+  ],
+
   module: {
+
     loaders: [
       {
         test: /\.js$/,
@@ -43,16 +50,8 @@ var webpackOptions = {
         loader: "json-loader"
       }
     ]
-  },
-  
-  plugins: [
-    new webpack.DefinePlugin({
-      'process.env': {
-        //'NODE_ENV': '"production"'
-        'NODE_ENV': '"development"'
-      }
-    })
-  ]
+
+  }
 };
 
 gulp.task("default", ["watch", "build-node"]);
@@ -60,7 +59,7 @@ gulp.task("default", ["watch", "build-node"]);
 gulp.task("build-node", function(){
 
   return gulp.src(files.js)
-    .pipe(webpackStream(webpackOptions))
+    .pipe(webpackStream(webpackOptions, webpack))
     //.pipe(uglify())
     .pipe(gulp.dest("./"));
 });

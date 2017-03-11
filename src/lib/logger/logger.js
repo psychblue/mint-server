@@ -9,7 +9,12 @@ class Logger {
 
 	constructor(label, options){
 		const container = new winston.Container();
-		container.add(label, options);
+		if(process.env.NODE_ENV === "development"){
+			container.add(label, options.dev);
+		}
+		else{
+			container.add(label, options.prod);
+		}
 
 		this.logger = container.get(label);
 
@@ -17,7 +22,7 @@ class Logger {
 			this.logger.error(err.stack);
 		})
 
-		this.logger.info("Logger is set...");
+		this.logger.info("[Logger]  Logger is set...");
 	}
 
 	getLogger(){
@@ -26,23 +31,38 @@ class Logger {
 }
 
 const logger = new Logger("main", {
-  transports: [
-    new winston.transports.DailyRotateFile({
-      level: "debug",
-      filename: "main_",
-			datePattern: "yyyyMMdd.log",
-      maxsize: 1000000,
-      maxFiles: 5,
-      json: false,
-      //handleExceptions: true,
-      //humanReadableUnhandledException: true,
-      timestamp: () => moment().format("YYYY-MM-DD HH:mm:ss.SSS"),
-      formatter: (options) => "(" + process.pid + ")\t" + options.timestamp()	+ " ["
-                              + options.level.toUpperCase()
-                              + "]\t"
-                              + options.message
-    })
-  ]
+	prod: {
+	  transports: [
+	    new winston.transports.DailyRotateFile({
+	      level: "debug",
+	      filename: "main_",
+				datePattern: "yyyyMMdd.log",
+	      maxsize: 1000000,
+	      maxFiles: 5,
+	      json: false,
+	      //handleExceptions: true,
+	      //humanReadableUnhandledException: true,
+	      timestamp: () => moment().format("YYYY-MM-DD HH:mm:ss.SSS"),
+	      formatter: (options) => "(" + process.pid + ")\t" + options.timestamp()	+ " ["
+	                              + options.level.toUpperCase()
+	                              + "]\t"
+	                              + options.message
+	    })
+		]
+	},
+	dev: {
+		transports: [
+			new winston.transports.Console({
+				level: "debug",
+				json: false,
+				timestamp: () => moment().format("YYYY-MM-DD HH:mm:ss.SSS"),
+	      formatter: (options) => "(" + process.pid + ")\t" + options.timestamp()	+ " ["
+	                              + options.level.toUpperCase()
+	                              + "]\t"
+	                              + options.message
+			})
+	  ]
+	}
 });
 
 export default logger;

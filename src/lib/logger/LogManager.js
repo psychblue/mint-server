@@ -3,13 +3,13 @@ import logger from "./logger";
 class LogManager {
 
   constructor(label){
-    this.label = "[" + label + "]\t";
+    this.label = "[" + label + "]  ";
     this.logger = logger.getLogger();
-    this.logger.info("LogManager for " + label + " is set...");
+    this.logger.info("[LogManager]  LogManager for " + label + " is set...");
   }
 
   func(log){
-    this.logger.info(this.label + ">> ENTER: " + log);
+    this.logger.debug(this.label + ">> ENTER: " + log);
   }
 
   error(log){

@@ -61,11 +61,11 @@ class LoginManager {
     this.log.func("checkWhitePath()");
 
     if(this.whitePath.find((element) => element === path) !== undefined){
-      this.log.debug("true");
+      this.log.debug("whitePath: true");
       return true;
     }
     else{
-      this.log.debug("false");
+      this.log.debug("WhitePath: false");
       return false;
     }
   }
