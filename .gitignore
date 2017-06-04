@@ -2,4 +2,4 @@
 /statics
 .DS_Store*
 *.min.js
-*.log
+*.log*

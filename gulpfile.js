@@ -42,6 +42,7 @@ var webpackOptions = {
         loader: "babel-loader",
         query: {
           presets: ["es2015"],
+          plugins: ["transform-class-properties"],
           cacheDirectory: true
         }
       },

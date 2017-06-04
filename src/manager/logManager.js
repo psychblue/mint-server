@@ -1,36 +1,97 @@
 /************************************************
-/ NPM Modules
+/ External Modules
 /***********************************************/
 import winston from "winston";
 import DailyRotateFile from "winston-daily-rotate-file";
 import moment from "moment";
 
-class Logger {
+/************************************************
+/ LogEnabler
+/***********************************************/
+class LogEnabler {
 
-	constructor(label, options){
+  constructor(label, logger){
+
+    //Properties
+    this.label = `[ ${label} ]  `;
+    this.logger = logger;
+
+    this.logger.info(`[ LogEnabler ]  Logger for ${label} is enabled...`);
+  }
+
+  func(log, id){
+
+    if(id !== undefined){
+      this.logger.debug(`${this.label} (${id}) >> ENTER: ${log}`);
+    }
+    else{
+      this.logger.debug(`${this.label} >> ENTER: ${log}`);
+    }
+  }
+
+  error(log){
+
+    this.logger.error(this.label + log);
+  }
+
+  warn(log){
+
+    this.logger.warn(this.label + log);
+  }
+
+  info(log){
+
+    this.logger.info(this.label + log);
+  }
+
+  verbose(log){
+
+    this.logger.verbose(this.label + log);
+  }
+
+  debug(log){
+
+    this.logger.debug(this.label + log);
+  }
+
+  silly(log){
+
+    this.logger.silly(this.label + log);
+  }
+}
+
+/************************************************
+/ LogManager
+/***********************************************/
+class LogManager {
+
+	constructor(name, options){
+
 		const container = new winston.Container();
 		if(process.env.NODE_ENV === "development"){
-			container.add(label, options.dev);
+			container.add(name, options.dev);
 		}
 		else{
-			container.add(label, options.prod);
+			container.add(name, options.prod);
 		}
 
-		this.logger = container.get(label);
+		this.logger = container.get(name);
 
 		this.logger.on("error", (err) => {
 			this.logger.error(err.stack);
 		})
 
-		this.logger.info("[Logger]  Logger is set...");
+		this.logger.info(`[ LogManager ]  ${name} logger is set...`);
 	}
 
-	getLogger(){
-		return this.logger;
+	getLogger(label){
+
+		return new LogEnabler(label, this.logger);
 	}
 }
 
-const logger = new Logger("main", {
+//Singleton
+const logManager = new LogManager("main", {
 	prod: {
 	  transports: [
 	    new winston.transports.DailyRotateFile({
@@ -55,6 +116,7 @@ const logger = new Logger("main", {
 			new winston.transports.Console({
 				level: "debug",
 				json: false,
+				colorize: true,
 				timestamp: () => moment().format("YYYY-MM-DD HH:mm:ss.SSS"),
 	      formatter: (options) => "(" + process.pid + ")\t" + options.timestamp()	+ " ["
 	                              + options.level.toUpperCase()
@@ -65,4 +127,4 @@ const logger = new Logger("main", {
 	}
 });
 
-export default logger;
+export default logManager;
